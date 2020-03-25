@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es-ES">
+  <head>
+    <title>CESI-CONVERSOR</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/index.css">
+  </head>
+  <body>
+
+    <br>
+
+    <div class="jumbotron">
+      <div class="container">
+        <div class="text-center">
+            <img src="static/cesi.jpg" class="img-fluid rounded" alt="">
+        </div>
+
+        <br>
+
+        <form>
+          <div class="input-group">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="selectedFile" accept=".csv">
+              <label class="custom-file-label" for="selectedFile">Fichero</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-7">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="courseType" id="courseTypeOrg" value="org" checked>
+                <label class="form-check-label" for="courseTypeOrg">Organizadora</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="courseType" id="courseTypeBon" value="bon">
+                <label class="form-check-label" for="courseTypeBon">Bonificada</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="courseType" id="courseTypeGrp" value="grp">
+                <label class="form-check-label" for="courseTypeGrp">Grupo Empresa</label>
+              </div>
+            </div>
+            <div class="custom-control custom-switch col-md-3">
+              <input type="checkbox" class="custom-control-input" id="isOnline">
+              <label class="custom-control-label" for="isOnline">Curso Online</label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="btnConverter">Convertir</button>
+        </form>
+
+      </div>
+    </div>
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+      window.jQuery = window.$ = require('jquery')
+    </script>
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script>
+      var Papa = require('papaparse')
+    </script>
+    <!-- <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script> -->
+    <script>
+      var convert = require('xml-js')
+    </script>
+    <script>
+      var fs = require('fs')
+    </script>
+    <script src="js/index.js"></script>
+  </body>
+</html>

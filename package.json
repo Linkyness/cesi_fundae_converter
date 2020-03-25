@@ -1,0 +1,20 @@
+{
+  "name": "cesi_fundae_converter",
+  "version": "2020.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . CesiConversorFundae --out=dist/win64 --platform=win32 --arch=x64 --icon=static/cesi.ico --overwrite"
+  },
+  "devDependencies": {
+    "electron": "^8.0.3",
+    "electron-packager": "^14.2.1"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "jquery": "^3.4.1",
+    "papaparse": "^5.1.1",
+    "xml-js": "^1.6.11"
+  }
+}
