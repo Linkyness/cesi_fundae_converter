@@ -1,7 +1,8 @@
 document.querySelector('.custom-file-input').addEventListener('change',function(e) {
-  window.fileName = document.getElementById("selectedFile").files[0].name
-  var nextSibling = e.target.nextElementSibling
-  nextSibling.innerText = fileName
+	window.fileName = document.getElementById("selectedFile").files[0].name;
+	window.filePath = document.getElementById("selectedFile").files[0].path;
+  var nextSibling = e.target.nextElementSibling;
+  nextSibling.innerText = fileName;
 })
 
 
@@ -332,10 +333,16 @@ function xmlConvert(js)
 	var xmlOptions = {compact: true, ignoreComment: true, spaces: 4};
 	var xml = convert.js2xml(js, xmlOptions);
 
-	var xmlName = window.fileName.split(".")[0] + ".xml"
-	fs.writeFile(xmlName, xml, function(err){
-		if (err) throw err;
-		console.log('Saved!');
-	})
+	var xmlName = window.fileName.split(".")[0] + ".xml";
+	var xmlPath = window.filePath.split(".")[0] + ".xml";
+
+	var alertText = `Se va a guardar como:\n${xmlPath}.\n¿Desea continuar?`
+	if(confirm(alertText))
+	{
+		fs.writeFile(xmlPath, xml, function(err){
+			if (err) throw err;	
+			console.log('Saved!');
+		})
+	}
 }
 
