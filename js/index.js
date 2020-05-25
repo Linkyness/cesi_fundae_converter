@@ -106,8 +106,11 @@ function buildConfig()
 	return {
 		delimiter: ";",
 		header: false,
+		dynamicTyping: false,
 		complete: completeFn,
-		error: errorFn
+		error: errorFn,
+		skipEmptyLines: true,
+		encoding: "ISO-8859-1"
 	};
 }
 
@@ -194,17 +197,7 @@ function dataTransform(data)
 					"participante" : []
 				},
 				"costes": {
-					"coste": {
-						"directos": "100.00",
-						"indirectos": "0",
-						"salariales": "0",
-						"periodos": {
-							"periodo": {
-								"mes": "12",
-								"importe": "0"
-							}
-						}
-					}
+					"coste": {}
 				}
 			}
 		}
@@ -216,19 +209,52 @@ function dataTransform(data)
 
 	var coste = finalData.grupos.grupo.costes.coste;
 
-	if (courseType == "bon")
+	if (courseType == "bon") {
 		coste["directos"] = "100";
-	else
+		coste["indirectos"] = "0";
+		coste["salariales"] = "0";
+		coste["periodos"] = {
+			"periodo": {
+				"mes": "12",
+				"importe": "0"
+			}
+		};
+	}
+	else if (courseType == "grp") {
 		coste["cifagrupada"] = cifAux;
-
-	if (courseType == "org")
+		coste["directos"] = "100.00";
+		coste["indirectos"] = "0";
+		coste["salariales"] = "0";
+		coste["periodos"] = {
+			"periodo": {
+				"mes": "12",
+				"importe": "0"
+			}
+		};
+	}
+	else if (courseType == "org") {
+		coste["cifagrupada"] = cifAux;
+		coste["directos"] = "100.00";
+		coste["indirectos"] = "0";
 		coste["organizacion"] = "0";
+		coste["salariales"] = "0";
+		coste["periodos"] = {
+			"periodo": {
+				"mes": "12",
+				"importe": "0"
+			}
+		};
+	}
 
 	xmlConvert(finalData);
 }
 
 function crearParticipante(item)
 {
+	var courseType = $("input[name=courseType]:checked").val();
+
+	item.map(function(e){return e.trim();});
+
 	let tipoDocumento = "";
 	let cifEmpresa = item[9];
 	let discapacidad = false;
@@ -238,6 +264,7 @@ function crearParticipante(item)
 	let grupoCotizacion = item[17].split(" ")[0];
 	let nivelEstudios = "";
 	let diplomaAcreditativo = "N";
+
 
 	if (cifAux == "" && cifEmpresa != "")
 		cifAux = cifEmpresa;
@@ -263,7 +290,7 @@ function crearParticipante(item)
 
 	if (item[16] == "Directivo")
 		categoriaProfesional = "1";
-	else if (item[16] == "MIntermedio")
+	else if (item[16] == "Mando Intermedio")
 		categoriaProfesional = "2";
 	else if (item[16] == "Técnico")
 		categoriaProfesional = "3";
@@ -297,33 +324,80 @@ function crearParticipante(item)
 	else
 		nivelEstudios = "0";
 
-	let participante = {
-		"nif": item[3],
-		"N_TIPO_DOCUMENTO": tipoDocumento,
-		"nombre": item[4],
-		"primerApellido": item[5],
-		"segundoApellido": item[6],
-		"niss": item[10],
-		"cifEmpresa": cifEmpresa,
-		"ctaCotizacion": item[21],
-		"fechaNacimiento": item[11],
-		"sexo": item[12],
-		"email": item[7],
-		"telefono": item[8],
-		"discapacidad": discapacidad,
-		"afectadosTerrorismo": afectadosTerrorismo,
-		"afectadosViolenciaGenero": afectadosViolenciaGenero,
-		"categoriaprofesional": categoriaProfesional,
-		"grupocotizacion": grupoCotizacion,
-		"nivelestudios": nivelEstudios,
-		"DiplomaAcreditativo": diplomaAcreditativo
-	};
+	if (courseType == "bon") {
+		var participante = {
+			"nif": item[3],
+			"N_TIPO_DOCUMENTO": tipoDocumento,
+			"nombre": item[4],
+			"primerApellido": item[5],
+			"segundoApellido": item[6],
+			"niss": item[10],
+			"cifEmpresa": cifEmpresa,
+			"ctaCotizacion": item[21],
+			"fechaNacimiento": item[11],
+			"sexo": item[12],
+			"email": item[7],
+			"telefono": item[8],
+			"discapacidad": discapacidad,
+			"afectadosTerrorismo": afectadosTerrorismo,
+			"afectadosViolenciaGenero": afectadosViolenciaGenero,
+			"categoriaprofesional": categoriaProfesional,
+			"grupocotizacion": grupoCotizacion,
+			"nivelestudios": nivelEstudios,
+		};
+	}
+	else if (courseType == "grp") {
+		var participante = {
+			"nif": item[3],
+			"N_TIPO_DOCUMENTO": tipoDocumento,
+			"nombre": item[4],
+			"primerApellido": item[5],
+			"segundoApellido": item[6],
+			"niss": item[10],
+			"cifEmpresa": cifEmpresa,
+			"ctaCotizacion": item[21],
+			"fechaNacimiento": item[11],
+			"email": item[7],
+			"telefono": item[8],
+			"sexo": item[12],
+			"discapacidad": discapacidad,
+			"afectadosTerrorismo": afectadosTerrorismo,
+			"afectadosViolenciaGenero": afectadosViolenciaGenero,
+			"categoriaprofesional": categoriaProfesional,
+			"grupocotizacion": grupoCotizacion,
+			"nivelestudios": nivelEstudios,
+		};
+	}
+	else if (courseType == "org") {
+		var participante = {
+			"nif": item[3],
+			"N_TIPO_DOCUMENTO": tipoDocumento,
+			"nombre": item[4],
+			"primerApellido": item[5],
+			"segundoApellido": item[6],
+			"niss": item[10],
+			"cifEmpresa": cifEmpresa,
+			"ctaCotizacion": item[21],
+			"fechaNacimiento": item[11],
+			"email": item[7],
+			"telefono": item[8],
+			"sexo": item[12],
+			"discapacidad": discapacidad,
+			"afectadosTerrorismo": afectadosTerrorismo,
+			"afectadosViolenciaGenero": afectadosViolenciaGenero,
+			"categoriaprofesional": categoriaProfesional,
+			"grupocotizacion": grupoCotizacion,
+			"nivelestudios": nivelEstudios,
+		};
+	}
 
 	if (isOnlineCheck.checked)
 	{
 		participante["fechaInicioTeleformacion"] = item[19];
 		participante["fechaFinTeleformacion"] = item[20];
 	}
+
+	participante["DiplomaAcreditativo"] = diplomaAcreditativo;
 
 	participantes.push(participante);
 }
@@ -333,8 +407,11 @@ function xmlConvert(js)
 	var xmlOptions = {compact: true, ignoreComment: true, spaces: 4};
 	var xml = convert.js2xml(js, xmlOptions);
 
-	var xmlName = window.fileName.split(".")[0] + ".xml";
-	var xmlPath = window.filePath.split(".")[0] + ".xml";
+	console.log(`file name: ${fileName}`);
+	console.log(`file path: ${filePath}`);
+
+	var xmlName = window.fileName.slice(0, -4) + ".xml";
+	var xmlPath = window.filePath.slice(0, -4) + ".xml";
 
 	var alertText = `Se va a guardar como:\n${xmlPath}.\n¿Desea continuar?`
 	if(confirm(alertText))
