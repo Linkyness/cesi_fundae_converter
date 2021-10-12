@@ -8,7 +8,7 @@
     "build": "electron-packager . CesiConversorFundae --out=dist/win64 --platform=win32 --arch=x64 --icon=static/cesi.ico --overwrite"
   },
   "devDependencies": {
-    "electron": "^9.4.0",
+    "electron": "^11.5.0",
     "electron-packager": "^14.2.1"
   },
   "dependencies": {
