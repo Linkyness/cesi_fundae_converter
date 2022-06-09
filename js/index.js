@@ -16,7 +16,7 @@ var participantes = [];
 
 $(function()
 {
-	$('#btnConverter').click(function()
+	$('#btnConverter').on("click", function()
 	{
 		if ($(this).prop('disabled') == "true")
 			return;
@@ -181,69 +181,90 @@ function dataTransform(data)
 	var courseType = $("input[name=courseType]:checked").val();
 	cifAux = "";
 
-	var finalData  = {
-		"_declaration": {
-			"_attributes": {
-				"version": "1.0",
-				"encoding": "UTF-8",
-				"standalone": "no"
+	if (courseType == "con") {
+		var finalData  = {
+			"_declaration": {
+				"_attributes": {
+					"version": "1.0",
+					"encoding": "UTF-8",
+					"standalone": "yes"
+				}
+			},
+			"NewDataSet": {
+				"Participants": []
 			}
-		},
-		"grupos": {
-			"grupo": {
-				"idAccion": data[0][0],
-				"idGrupo": data[0][1],
-				"participantes": {
-					"participante" : []
-				},
-				"costes": {
-					"coste": {}
+		};
+
+		participantes = finalData.NewDataSet.Participants;
+
+		data.forEach(crearParticipanteCon);
+	}
+
+	else {
+		var finalData  = {
+			"_declaration": {
+				"_attributes": {
+					"version": "1.0",
+					"encoding": "UTF-8",
+					"standalone": "no"
+				}
+			},
+			"grupos": {
+				"grupo": {
+					"idAccion": data[0][0],
+					"idGrupo": data[0][1],
+					"participantes": {
+						"participante" : []
+					},
+					"costes": {
+						"coste": {}
+					}
 				}
 			}
+		};
+
+		participantes = finalData.grupos.grupo.participantes.participante;
+
+		data.forEach(crearParticipante);
+
+		var coste = finalData.grupos.grupo.costes.coste;
+
+		if (courseType == "bon") {
+			coste["directos"] = "100";
+			coste["indirectos"] = "0";
+			coste["salariales"] = "0";
+			coste["periodos"] = {
+				"periodo": {
+					"mes": "12",
+					"importe": "0"
+				}
+			};
 		}
-	};
-
-	participantes = finalData.grupos.grupo.participantes.participante;
-
-	data.forEach(crearParticipante);
-
-	var coste = finalData.grupos.grupo.costes.coste;
-
-	if (courseType == "bon") {
-		coste["directos"] = "100";
-		coste["indirectos"] = "0";
-		coste["salariales"] = "0";
-		coste["periodos"] = {
-			"periodo": {
-				"mes": "12",
-				"importe": "0"
-			}
-		};
-	}
-	else if (courseType == "grp") {
-		coste["cifagrupada"] = cifAux;
-		coste["directos"] = "100.00";
-		coste["indirectos"] = "0";
-		coste["salariales"] = "0";
-		coste["periodos"] = {
-			"periodo": {
-				"mes": "12",
-				"importe": "0"
-			}
-		};
-	}
-	else if (courseType == "org") {
-		coste["cifagrupada"] = cifAux;
-		coste["directos"] = "100.00";
-		coste["indirectos"] = "0";
-		coste["organizacion"] = "0";
-		coste["salariales"] = "0";
-		coste["periodos"] = {
-			"periodo": {
-				"mes": "12",
-				"importe": "0"
-			}
-		};
+		else if (courseType == "grp") {
+			coste["cifagrupada"] = cifAux;
+			coste["directos"] = "100.00";
+			coste["indirectos"] = "0";
+			coste["salariales"] = "0";
+			coste["periodos"] = {
+				"periodo": {
+					"mes": "12",
+					"importe": "0"
+				}
+			};
+		}
+		else if (courseType == "org") {
+			coste["cifagrupada"] = cifAux;
+			coste["directos"] = "100.00";
+			coste["indirectos"] = "0";
+			coste["organizacion"] = "0";
+			coste["salariales"] = "0";
+			coste["periodos"] = {
+				"periodo": {
+					"mes": "12",
+					"importe": "0"
+				}
+			};
+		}
 	}
 
 	xmlConvert(finalData);
@@ -398,6 +419,47 @@ function crearParticipante(item)
 	}
 
 	participante["DiplomaAcreditativo"] = diplomaAcreditativo;
+
+	participantes.push(participante);
+}
+
+function crearParticipanteCon(item)
+{
+	item.map(function(e){return e.trim();});
+
+	var participante = {
+		"NumAccio": item[0],
+		"NumGrup": item[1],
+		"Baixa": item[2],
+		"Nom": item[3],
+		"Cognoms": item[4],
+		"NIF": item[5],
+		"TipusDocument": item[6],
+		"NASS": item[7],
+		"Colectiu": item[8],
+		"Genere": item[9],
+		"dataNaixement": item[10],
+		"Discapacitat": item[11],
+		"Adreca": item[12],
+		"CP": item[13],
+		"CodiMunicipi": item[14],
+		"Telefon1": item[15],
+		"Telefon2": item[16],
+		"Email": item[17],
+		"DemandantOcupacio": item[18],
+		"Area": item[19],
+		"Categories": item[20],
+		"Estudis": item[21],
+		"AturatLLargaDurada": item[22],
+		"NomSentit": item[23],
+		"AutoritzoDifusio": item[24],
+		"IdTipusVia": item[25],
+		"RequisitAcces": item[26],
+		"Procedencia": item[27],
+		"AfectatERTO": item[28],
+		"VictimaTerrorisme": item[29],
+		"VictimaViolenciaGenere": item[30],
+	};
 
 	participantes.push(participante);
 }
