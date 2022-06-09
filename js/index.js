@@ -199,7 +199,6 @@ function dataTransform(data)
 
 		data.forEach(crearParticipanteCon);
 	}
-
 	else {
 		var finalData  = {
 			"_declaration": {

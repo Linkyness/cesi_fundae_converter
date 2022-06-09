@@ -7,7 +7,8 @@ function createWindow () {
     height: 600,
     icon: 'static/cesi.ico',
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     }
   })
 
